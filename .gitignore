@@ -1,0 +1,21 @@
+# Dependencies
+api/node_modules/
+ui/node_modules/
+
+# Build output
+ui/dist/
+
+# Runtime data
+api/src/data/
+api/src/stacks/
+
+# Environment (berisi password/IP — jangan di-commit!)
+api/.env
+ui/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
