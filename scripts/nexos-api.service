@@ -1,0 +1,35 @@
+[Unit]
+Description=NexOS API Backend
+Documentation=https://github.com/youruser/nexos
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+User=nexos
+Group=nexos
+WorkingDirectory=/opt/nexos/api
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=5s
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/nexos/api/.env
+
+# Docker socket access
+SupplementaryGroups=docker
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/nexos/api/src/data /opt/nexos/api/src/stacks /tmp
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nexos-api
+
+[Install]
+WantedBy=multi-user.target

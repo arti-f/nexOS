@@ -1,0 +1,30 @@
+[Unit]
+Description=NexOS UI Frontend (static serve)
+Documentation=https://github.com/youruser/nexos
+After=network.target nexos-api.service
+Wants=nexos-api.service
+
+[Service]
+Type=simple
+User=nexos
+Group=nexos
+WorkingDirectory=/opt/nexos/ui
+
+# serve the Vite build output on port 3000
+ExecStart=/usr/bin/npx serve dist -p 3000 -s
+Restart=on-failure
+RestartSec=5s
+
+Environment=NODE_ENV=production
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/tmp
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nexos-ui
+
+[Install]
+WantedBy=multi-user.target

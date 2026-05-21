@@ -1,0 +1,961 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-01-01",
+  "categories": [
+    {
+      "id": "infrastructure",
+      "label": "Infrastructure",
+      "icon": "\ud83c\udfd7\ufe0f"
+    },
+    {
+      "id": "monitoring",
+      "label": "Monitoring",
+      "icon": "\ud83d\udcca"
+    },
+    {
+      "id": "networking",
+      "label": "Networking",
+      "icon": "\ud83c\udf10"
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "icon": "\ud83d\udd12"
+    },
+    {
+      "id": "productivity",
+      "label": "Productivity",
+      "icon": "\ud83d\udcbc"
+    },
+    {
+      "id": "media",
+      "label": "Media",
+      "icon": "\ud83c\udfac"
+    },
+    {
+      "id": "development",
+      "label": "Development",
+      "icon": "\ud83d\udcbb"
+    },
+    {
+      "id": "automation",
+      "label": "Automation",
+      "icon": "\u26a1"
+    },
+    {
+      "id": "iot",
+      "label": "IoT & Home",
+      "icon": "\ud83c\udfe0"
+    }
+  ],
+  "apps": [
+    {
+      "id": "portainer",
+      "name": "Portainer",
+      "tagline": "Docker management UI",
+      "description": "Web-based container management interface. Manage Docker environments, stacks, volumes, networks, and images with a clean GUI.",
+      "icon": "\ud83d\udc33",
+      "category": "infrastructure",
+      "tags": [
+        "docker",
+        "management",
+        "ui"
+      ],
+      "author": "Portainer.io",
+      "website": "https://portainer.io",
+      "stars": 4.8,
+      "installs": 12400,
+      "ports": [
+        {
+          "container": 9000,
+          "host": 9000,
+          "protocol": "tcp",
+          "label": "HTTP UI"
+        },
+        {
+          "container": 9443,
+          "host": 9443,
+          "protocol": "tcp",
+          "label": "HTTPS UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "/var/run/docker.sock",
+          "container": "/var/run/docker.sock",
+          "label": "Docker socket"
+        },
+        {
+          "host": "portainer_data",
+          "container": "/data",
+          "label": "Persistent data"
+        }
+      ],
+      "environment": [],
+      "image": "portainer/portainer-ce:latest",
+      "compose": "version: '3'\nservices:\n  portainer:\n    image: portainer/portainer-ce:latest\n    container_name: portainer\n    restart: unless-stopped\n    ports:\n      - 9443:9443\n      - 9000:9000\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n      - portainer_data:/data\nvolumes:\n  portainer_data:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 128,
+        "disk_mb": 50
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "nginx-proxy-manager",
+      "name": "Nginx Proxy Manager",
+      "tagline": "Reverse proxy with Let's Encrypt SSL",
+      "description": "Easily forward traffic to your services with automatic HTTPS from Let's Encrypt. Simple, powerful web UI for managing reverse proxies and SSL certs.",
+      "icon": "\ud83d\udd00",
+      "category": "networking",
+      "tags": [
+        "proxy",
+        "ssl",
+        "nginx",
+        "https"
+      ],
+      "author": "jc21",
+      "website": "https://nginxproxymanager.com",
+      "stars": 4.9,
+      "installs": 28600,
+      "ports": [
+        {
+          "container": 80,
+          "host": 80,
+          "protocol": "tcp",
+          "label": "HTTP"
+        },
+        {
+          "container": 443,
+          "host": 443,
+          "protocol": "tcp",
+          "label": "HTTPS"
+        },
+        {
+          "container": 81,
+          "host": 81,
+          "protocol": "tcp",
+          "label": "Admin UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "npm_data",
+          "container": "/data",
+          "label": "Config data"
+        },
+        {
+          "host": "npm_letsencrypt",
+          "container": "/etc/letsencrypt",
+          "label": "SSL certs"
+        }
+      ],
+      "environment": [],
+      "image": "jc21/nginx-proxy-manager:latest",
+      "compose": "version: '3'\nservices:\n  npm:\n    image: jc21/nginx-proxy-manager:latest\n    container_name: nginx-proxy-manager\n    restart: unless-stopped\n    ports:\n      - 80:80\n      - 443:443\n      - 81:81\n    volumes:\n      - npm_data:/data\n      - npm_letsencrypt:/etc/letsencrypt\nvolumes:\n  npm_data:\n  npm_letsencrypt:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 256,
+        "disk_mb": 100
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "grafana",
+      "name": "Grafana",
+      "tagline": "Observability & monitoring dashboards",
+      "description": "Open-source analytics platform. Build beautiful dashboards with support for Prometheus, InfluxDB, Loki, and 100+ data sources.",
+      "icon": "\ud83d\udcca",
+      "category": "monitoring",
+      "tags": [
+        "monitoring",
+        "dashboards",
+        "metrics",
+        "visualization"
+      ],
+      "author": "Grafana Labs",
+      "website": "https://grafana.com",
+      "stars": 4.7,
+      "installs": 19800,
+      "ports": [
+        {
+          "container": 3000,
+          "host": 3000,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "grafana_data",
+          "container": "/var/lib/grafana",
+          "label": "Dashboards & config"
+        }
+      ],
+      "environment": [
+        {
+          "key": "GF_SECURITY_ADMIN_USER",
+          "value": "admin",
+          "label": "Admin username",
+          "required": true
+        },
+        {
+          "key": "GF_SECURITY_ADMIN_PASSWORD",
+          "value": "changeme",
+          "label": "Admin password",
+          "required": true
+        },
+        {
+          "key": "GF_USERS_ALLOW_SIGN_UP",
+          "value": "false",
+          "label": "Allow sign-ups",
+          "required": false
+        }
+      ],
+      "image": "grafana/grafana:latest",
+      "compose": "version: '3'\nservices:\n  grafana:\n    image: grafana/grafana:latest\n    container_name: grafana\n    restart: unless-stopped\n    ports:\n      - 3000:3000\n    volumes:\n      - grafana_data:/var/lib/grafana\n    environment:\n      - GF_SECURITY_ADMIN_USER=admin\n      - GF_SECURITY_ADMIN_PASSWORD=changeme\nvolumes:\n  grafana_data:",
+      "resources": {
+        "cpu": "medium",
+        "ram_mb": 512,
+        "disk_mb": 500
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "vaultwarden",
+      "name": "Vaultwarden",
+      "tagline": "Self-hosted Bitwarden password manager",
+      "description": "Unofficial Bitwarden-compatible server written in Rust. Use all official Bitwarden clients with your own server. Lightweight and privacy-first.",
+      "icon": "\ud83d\udd10",
+      "category": "security",
+      "tags": [
+        "passwords",
+        "vault",
+        "bitwarden",
+        "security"
+      ],
+      "author": "dani-garcia",
+      "website": "https://github.com/dani-garcia/vaultwarden",
+      "stars": 4.9,
+      "installs": 22100,
+      "ports": [
+        {
+          "container": 80,
+          "host": 8880,
+          "protocol": "tcp",
+          "label": "Web vault"
+        },
+        {
+          "container": 3012,
+          "host": 3012,
+          "protocol": "tcp",
+          "label": "WebSocket"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "vaultwarden_data",
+          "container": "/data",
+          "label": "Vault data"
+        }
+      ],
+      "environment": [
+        {
+          "key": "DOMAIN",
+          "value": "https://vault.example.com",
+          "label": "Public domain (HTTPS required)",
+          "required": true
+        },
+        {
+          "key": "SIGNUPS_ALLOWED",
+          "value": "false",
+          "label": "Allow new signups",
+          "required": false
+        },
+        {
+          "key": "WEBSOCKET_ENABLED",
+          "value": "true",
+          "label": "Enable WebSocket",
+          "required": false
+        }
+      ],
+      "image": "vaultwarden/server:latest",
+      "compose": "version: '3'\nservices:\n  vaultwarden:\n    image: vaultwarden/server:latest\n    container_name: vaultwarden\n    restart: unless-stopped\n    ports:\n      - 8880:80\n      - 3012:3012\n    volumes:\n      - vaultwarden_data:/data\n    environment:\n      - DOMAIN=https://vault.example.com\n      - SIGNUPS_ALLOWED=false\n      - WEBSOCKET_ENABLED=true\nvolumes:\n  vaultwarden_data:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 64,
+        "disk_mb": 100
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "uptime-kuma",
+      "name": "Uptime Kuma",
+      "tagline": "Self-hosted uptime monitoring tool",
+      "description": "Monitor websites, TCP ports, Docker containers, and more. Beautiful status page, multi-channel notifications (Telegram, Slack, Discord, email).",
+      "icon": "\ud83d\udc93",
+      "category": "monitoring",
+      "tags": [
+        "monitoring",
+        "uptime",
+        "status-page",
+        "alerts"
+      ],
+      "author": "louislam",
+      "website": "https://github.com/louislam/uptime-kuma",
+      "stars": 4.8,
+      "installs": 18700,
+      "ports": [
+        {
+          "container": 3001,
+          "host": 3001,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "uptime_kuma_data",
+          "container": "/app/data",
+          "label": "App data"
+        }
+      ],
+      "environment": [],
+      "image": "louislam/uptime-kuma:1",
+      "compose": "version: '3'\nservices:\n  uptime-kuma:\n    image: louislam/uptime-kuma:1\n    container_name: uptime-kuma\n    restart: unless-stopped\n    ports:\n      - 3001:3001\n    volumes:\n      - uptime_kuma_data:/app/data\nvolumes:\n  uptime_kuma_data:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 256,
+        "disk_mb": 200
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "nextcloud",
+      "name": "Nextcloud",
+      "tagline": "Self-hosted cloud storage & collaboration",
+      "description": "Your personal cloud: file sync & share, calendar, contacts, Nextcloud Office. The full Google Drive / Dropbox replacement with complete data sovereignty.",
+      "icon": "\u2601\ufe0f",
+      "category": "productivity",
+      "tags": [
+        "cloud",
+        "storage",
+        "files",
+        "collaboration",
+        "office"
+      ],
+      "author": "Nextcloud GmbH",
+      "website": "https://nextcloud.com",
+      "stars": 4.5,
+      "installs": 31200,
+      "ports": [
+        {
+          "container": 80,
+          "host": 8080,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "nextcloud_data",
+          "container": "/var/www/html",
+          "label": "App files"
+        },
+        {
+          "host": "/mnt/data",
+          "container": "/var/www/html/data",
+          "label": "User data"
+        }
+      ],
+      "environment": [
+        {
+          "key": "MYSQL_PASSWORD",
+          "value": "nextcloud",
+          "label": "DB password",
+          "required": true
+        },
+        {
+          "key": "MYSQL_DATABASE",
+          "value": "nextcloud",
+          "label": "DB name",
+          "required": true
+        },
+        {
+          "key": "MYSQL_USER",
+          "value": "nextcloud",
+          "label": "DB user",
+          "required": true
+        },
+        {
+          "key": "MYSQL_HOST",
+          "value": "db",
+          "label": "DB host",
+          "required": true
+        }
+      ],
+      "image": "nextcloud:latest",
+      "compose": "version: '3'\nservices:\n  nextcloud:\n    image: nextcloud:latest\n    container_name: nextcloud\n    restart: unless-stopped\n    ports:\n      - 8080:80\n    volumes:\n      - nextcloud_data:/var/www/html\n    environment:\n      - MYSQL_PASSWORD=nextcloud\n      - MYSQL_DATABASE=nextcloud\n      - MYSQL_USER=nextcloud\n      - MYSQL_HOST=db\n  db:\n    image: mariadb:11\n    restart: unless-stopped\n    environment:\n      - MYSQL_ROOT_PASSWORD=rootpw\n      - MYSQL_PASSWORD=nextcloud\n      - MYSQL_DATABASE=nextcloud\n      - MYSQL_USER=nextcloud\n    volumes:\n      - nextcloud_db:/var/lib/mysql\nvolumes:\n  nextcloud_data:\n  nextcloud_db:",
+      "resources": {
+        "cpu": "medium",
+        "ram_mb": 1024,
+        "disk_mb": 10240
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "jellyfin",
+      "name": "Jellyfin",
+      "tagline": "Free software media system",
+      "description": "Stream movies, TV, music, and books from your own server to any device. No fees, no tracking. The fully open-source Plex alternative.",
+      "icon": "\ud83c\udfac",
+      "category": "media",
+      "tags": [
+        "media",
+        "streaming",
+        "movies",
+        "music",
+        "plex-alternative"
+      ],
+      "author": "Jellyfin Project",
+      "website": "https://jellyfin.org",
+      "stars": 4.8,
+      "installs": 24500,
+      "ports": [
+        {
+          "container": 8096,
+          "host": 8096,
+          "protocol": "tcp",
+          "label": "Web UI"
+        },
+        {
+          "container": 8920,
+          "host": 8920,
+          "protocol": "tcp",
+          "label": "HTTPS"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "jellyfin_config",
+          "container": "/config",
+          "label": "Config"
+        },
+        {
+          "host": "jellyfin_cache",
+          "container": "/cache",
+          "label": "Cache"
+        },
+        {
+          "host": "/mnt/media",
+          "container": "/media",
+          "label": "Media library"
+        }
+      ],
+      "environment": [],
+      "image": "jellyfin/jellyfin:latest",
+      "compose": "version: '3'\nservices:\n  jellyfin:\n    image: jellyfin/jellyfin:latest\n    container_name: jellyfin\n    restart: unless-stopped\n    ports:\n      - 8096:8096\n      - 8920:8920\n    volumes:\n      - jellyfin_config:/config\n      - jellyfin_cache:/cache\n      - /mnt/media:/media\nvolumes:\n  jellyfin_config:\n  jellyfin_cache:",
+      "resources": {
+        "cpu": "high",
+        "ram_mb": 1024,
+        "disk_mb": 1024
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "homeassistant",
+      "name": "Home Assistant",
+      "tagline": "Open-source home automation",
+      "description": "Automate your home with local-first intelligence. Supports 3000+ integrations: smart bulbs, thermostats, security cameras, sensors, and more.",
+      "icon": "\ud83c\udfe0",
+      "category": "iot",
+      "tags": [
+        "homeautomation",
+        "iot",
+        "smarthome",
+        "zigbee"
+      ],
+      "author": "Home Assistant",
+      "website": "https://home-assistant.io",
+      "stars": 4.9,
+      "installs": 35800,
+      "ports": [
+        {
+          "container": 8123,
+          "host": 8123,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "hass_config",
+          "container": "/config",
+          "label": "Configuration"
+        }
+      ],
+      "environment": [],
+      "image": "homeassistant/home-assistant:stable",
+      "compose": "version: '3'\nservices:\n  homeassistant:\n    image: homeassistant/home-assistant:stable\n    container_name: homeassistant\n    restart: unless-stopped\n    network_mode: host\n    volumes:\n      - hass_config:/config\n    privileged: true\nvolumes:\n  hass_config:",
+      "resources": {
+        "cpu": "medium",
+        "ram_mb": 512,
+        "disk_mb": 2048
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "adguard-home",
+      "name": "AdGuard Home",
+      "tagline": "Network-wide ad & tracker blocking",
+      "description": "DNS-based ad blocker for your entire network. Block ads and trackers for every device \u2014 no client software needed. Like Pi-hole but with more features.",
+      "icon": "\ud83d\udee1",
+      "category": "networking",
+      "tags": [
+        "dns",
+        "adblock",
+        "privacy",
+        "network"
+      ],
+      "author": "AdGuard",
+      "website": "https://adguard.com/adguard-home",
+      "stars": 4.8,
+      "installs": 16900,
+      "ports": [
+        {
+          "container": 53,
+          "host": 53,
+          "protocol": "udp",
+          "label": "DNS"
+        },
+        {
+          "container": 3000,
+          "host": 3000,
+          "protocol": "tcp",
+          "label": "Setup UI"
+        },
+        {
+          "container": 80,
+          "host": 8080,
+          "protocol": "tcp",
+          "label": "Admin UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "adguard_work",
+          "container": "/opt/adguardhome/work",
+          "label": "Work dir"
+        },
+        {
+          "host": "adguard_conf",
+          "container": "/opt/adguardhome/conf",
+          "label": "Config"
+        }
+      ],
+      "environment": [],
+      "image": "adguard/adguardhome:latest",
+      "compose": "version: '3'\nservices:\n  adguardhome:\n    image: adguard/adguardhome:latest\n    container_name: adguardhome\n    restart: unless-stopped\n    ports:\n      - 53:53/udp\n      - 53:53/tcp\n      - 3000:3000/tcp\n      - 8080:80/tcp\n    volumes:\n      - adguard_work:/opt/adguardhome/work\n      - adguard_conf:/opt/adguardhome/conf\nvolumes:\n  adguard_work:\n  adguard_conf:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 128,
+        "disk_mb": 100
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "gitea",
+      "name": "Gitea",
+      "tagline": "Lightweight self-hosted Git service",
+      "description": "A painless self-hosted Git service. Like GitHub/GitLab but lightweight enough to run on a Raspberry Pi. Repos, issues, CI/CD, wiki \u2014 everything you need.",
+      "icon": "\ud83d\udc19",
+      "category": "development",
+      "tags": [
+        "git",
+        "dev",
+        "code",
+        "ci",
+        "github-alternative"
+      ],
+      "author": "Gitea",
+      "website": "https://gitea.io",
+      "stars": 4.7,
+      "installs": 11300,
+      "ports": [
+        {
+          "container": 3000,
+          "host": 3030,
+          "protocol": "tcp",
+          "label": "Web UI"
+        },
+        {
+          "container": 22,
+          "host": 2222,
+          "protocol": "tcp",
+          "label": "SSH"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "gitea_data",
+          "container": "/data",
+          "label": "Repos & config"
+        }
+      ],
+      "environment": [
+        {
+          "key": "USER_UID",
+          "value": "1000",
+          "label": "Host user UID",
+          "required": false
+        },
+        {
+          "key": "USER_GID",
+          "value": "1000",
+          "label": "Host user GID",
+          "required": false
+        }
+      ],
+      "image": "gitea/gitea:latest",
+      "compose": "version: '3'\nservices:\n  gitea:\n    image: gitea/gitea:latest\n    container_name: gitea\n    restart: unless-stopped\n    ports:\n      - 3030:3000\n      - 2222:22\n    volumes:\n      - gitea_data:/data\n    environment:\n      - USER_UID=1000\n      - USER_GID=1000\nvolumes:\n  gitea_data:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 256,
+        "disk_mb": 1024
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    },
+    {
+      "id": "immich",
+      "name": "Immich",
+      "tagline": "Self-hosted Google Photos alternative",
+      "description": "High-performance photo & video backup. Face recognition, object tagging, smart search powered by machine learning. Native iOS and Android app.",
+      "icon": "\ud83d\udcf8",
+      "category": "media",
+      "tags": [
+        "photos",
+        "backup",
+        "ml",
+        "gallery"
+      ],
+      "author": "alextran1502",
+      "website": "https://immich.app",
+      "stars": 4.9,
+      "installs": 20100,
+      "ports": [
+        {
+          "container": 2283,
+          "host": 2283,
+          "protocol": "tcp",
+          "label": "Web UI & API"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "/mnt/photos",
+          "container": "/usr/src/app/upload",
+          "label": "Photo storage"
+        }
+      ],
+      "environment": [
+        {
+          "key": "DB_PASSWORD",
+          "value": "postgres",
+          "label": "Database password",
+          "required": true
+        }
+      ],
+      "image": "ghcr.io/immich-app/immich-server:release",
+      "compose": "# See https://immich.app/docs for full compose stack\nversion: '3'\nservices:\n  immich-server:\n    image: ghcr.io/immich-app/immich-server:release\n    container_name: immich_server\n    restart: unless-stopped\n    ports:\n      - 2283:2283\n    volumes:\n      - /mnt/photos:/usr/src/app/upload",
+      "resources": {
+        "cpu": "high",
+        "ram_mb": 2048,
+        "disk_mb": 5120
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "tagline": "Workflow automation platform",
+      "description": "Build automation workflows connecting 350+ apps and services. Visual no-code/low-code editor. Self-hostable alternative to Zapier and Make.com.",
+      "icon": "\u26a1",
+      "category": "automation",
+      "tags": [
+        "automation",
+        "workflow",
+        "integration",
+        "no-code"
+      ],
+      "author": "n8n GmbH",
+      "website": "https://n8n.io",
+      "stars": 4.6,
+      "installs": 12800,
+      "ports": [
+        {
+          "container": 5678,
+          "host": 5678,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "n8n_data",
+          "container": "/home/node/.n8n",
+          "label": "Workflows & config"
+        }
+      ],
+      "environment": [
+        {
+          "key": "N8N_BASIC_AUTH_ACTIVE",
+          "value": "true",
+          "label": "Enable basic auth",
+          "required": false
+        },
+        {
+          "key": "N8N_BASIC_AUTH_USER",
+          "value": "admin",
+          "label": "Auth username",
+          "required": false
+        },
+        {
+          "key": "N8N_BASIC_AUTH_PASSWORD",
+          "value": "changeme",
+          "label": "Auth password",
+          "required": false
+        }
+      ],
+      "image": "n8nio/n8n:latest",
+      "compose": "version: '3'\nservices:\n  n8n:\n    image: n8nio/n8n:latest\n    container_name: n8n\n    restart: unless-stopped\n    ports:\n      - 5678:5678\n    volumes:\n      - n8n_data:/home/node/.n8n\n    environment:\n      - N8N_BASIC_AUTH_ACTIVE=true\n      - N8N_BASIC_AUTH_USER=admin\n      - N8N_BASIC_AUTH_PASSWORD=changeme\nvolumes:\n  n8n_data:",
+      "resources": {
+        "cpu": "medium",
+        "ram_mb": 512,
+        "disk_mb": 512
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "wireguard-easy",
+      "name": "WireGuard Easy",
+      "tagline": "WireGuard VPN with web UI",
+      "description": "The easiest way to run WireGuard VPN. Web UI to add/remove clients, view connection stats, and download client configs with QR codes.",
+      "icon": "\ud83d\udee1\ufe0f",
+      "category": "networking",
+      "tags": [
+        "vpn",
+        "wireguard",
+        "networking",
+        "security"
+      ],
+      "author": "wg-easy",
+      "website": "https://github.com/wg-easy/wg-easy",
+      "stars": 4.7,
+      "installs": 9800,
+      "ports": [
+        {
+          "container": 51820,
+          "host": 51820,
+          "protocol": "udp",
+          "label": "WireGuard VPN"
+        },
+        {
+          "container": 51821,
+          "host": 51821,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "wg_easy_data",
+          "container": "/etc/wireguard",
+          "label": "WireGuard config"
+        }
+      ],
+      "environment": [
+        {
+          "key": "WG_HOST",
+          "value": "vpn.example.com",
+          "label": "Server public hostname/IP",
+          "required": true
+        },
+        {
+          "key": "PASSWORD",
+          "value": "changeme",
+          "label": "Web UI password",
+          "required": true
+        }
+      ],
+      "image": "ghcr.io/wg-easy/wg-easy:latest",
+      "compose": "version: '3'\nservices:\n  wg-easy:\n    image: ghcr.io/wg-easy/wg-easy:latest\n    container_name: wg-easy\n    restart: unless-stopped\n    cap_add:\n      - NET_ADMIN\n      - SYS_MODULE\n    sysctls:\n      - net.ipv4.ip_forward=1\n    ports:\n      - 51820:51820/udp\n      - 51821:51821/tcp\n    volumes:\n      - wg_easy_data:/etc/wireguard\n    environment:\n      - WG_HOST=vpn.example.com\n      - PASSWORD=changeme\nvolumes:\n  wg_easy_data:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 64,
+        "disk_mb": 50
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "code-server",
+      "name": "VS Code Server",
+      "tagline": "VS Code in the browser",
+      "description": "Run Visual Studio Code as a web application. Full IDE with extensions, integrated terminal, Git, and debugger \u2014 accessible from any browser on any device.",
+      "icon": "\ud83d\udcbb",
+      "category": "development",
+      "tags": [
+        "ide",
+        "vscode",
+        "development",
+        "browser"
+      ],
+      "author": "coder",
+      "website": "https://coder.com",
+      "stars": 4.6,
+      "installs": 9200,
+      "ports": [
+        {
+          "container": 8443,
+          "host": 8443,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "code_config",
+          "container": "/config",
+          "label": "Config & extensions"
+        },
+        {
+          "host": "/home/user/projects",
+          "container": "/projects",
+          "label": "Projects folder"
+        }
+      ],
+      "environment": [
+        {
+          "key": "PASSWORD",
+          "value": "changeme",
+          "label": "Web password",
+          "required": true
+        },
+        {
+          "key": "PUID",
+          "value": "1000",
+          "label": "User UID",
+          "required": false
+        }
+      ],
+      "image": "lscr.io/linuxserver/code-server:latest",
+      "compose": "version: '3'\nservices:\n  code-server:\n    image: lscr.io/linuxserver/code-server:latest\n    container_name: code-server\n    restart: unless-stopped\n    ports:\n      - 8443:8443\n    volumes:\n      - code_config:/config\n      - /home/user/projects:/projects\n    environment:\n      - PUID=1000\n      - PGID=1000\n      - PASSWORD=changeme\nvolumes:\n  code_config:",
+      "resources": {
+        "cpu": "medium",
+        "ram_mb": 1024,
+        "disk_mb": 2048
+      },
+      "arch": [
+        "amd64",
+        "arm64"
+      ]
+    },
+    {
+      "id": "filebrowser",
+      "name": "File Browser",
+      "tagline": "Web-based file manager",
+      "description": "Browse, upload, download, rename, and share files via a clean web UI. Supports user management, file editor, and video streaming.",
+      "icon": "\ud83d\udcc1",
+      "category": "productivity",
+      "tags": [
+        "files",
+        "storage",
+        "web",
+        "manager"
+      ],
+      "author": "filebrowser",
+      "website": "https://filebrowser.org",
+      "stars": 4.5,
+      "installs": 8400,
+      "ports": [
+        {
+          "container": 80,
+          "host": 8088,
+          "protocol": "tcp",
+          "label": "Web UI"
+        }
+      ],
+      "volumes": [
+        {
+          "host": "/mnt/data",
+          "container": "/srv",
+          "label": "Files to browse"
+        },
+        {
+          "host": "filebrowser_config",
+          "container": "/config",
+          "label": "App config"
+        }
+      ],
+      "environment": [],
+      "image": "filebrowser/filebrowser:latest",
+      "compose": "version: '3'\nservices:\n  filebrowser:\n    image: filebrowser/filebrowser:latest\n    container_name: filebrowser\n    restart: unless-stopped\n    ports:\n      - 8088:80\n    volumes:\n      - /mnt/data:/srv\n      - filebrowser_config:/config\nvolumes:\n  filebrowser_config:",
+      "resources": {
+        "cpu": "low",
+        "ram_mb": 64,
+        "disk_mb": 20
+      },
+      "arch": [
+        "amd64",
+        "arm64",
+        "armv7"
+      ]
+    }
+  ]
+}

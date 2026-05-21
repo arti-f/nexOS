@@ -1,0 +1,14 @@
+{
+  "name": "nexos",
+  "version": "1.0.0",
+  "description": "NexOS — Self-hosted Linux dashboard",
+  "private": true,
+  "scripts": {
+    "install:all":   "npm install --prefix api && npm install --prefix ui",
+    "build:ui":      "npm run build --prefix ui",
+    "dev:api":       "npm run dev --prefix api",
+    "dev:ui":        "npm run dev --prefix ui",
+    "start:api":     "npm run start --prefix api",
+    "start:ui":      "npx --prefix ui serve dist -p 3000"
+  }
+}
