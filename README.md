@@ -8,8 +8,8 @@ Self-hosted Linux dashboard — system monitoring, Docker management, App Store,
 
 ```bash
 # 1. Download and extract (or clone from git)
-wget https://github.com/youruser/nexos/releases/latest/download/nexos.tar.gz
-tar -xzf nexos.tar.gz && cd nexos
+wget https://github.com/arti-f/nexOS/releases/latest/download/nexos-complete.tar.gz
+tar -xzf nexos-complete.tar.gz && cd nexos
 
 # 2. Run installer as root
 sudo bash scripts/install.sh
