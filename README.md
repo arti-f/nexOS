@@ -7,12 +7,8 @@ Self-hosted Linux dashboard — system monitoring, Docker management, App Store,
 ## Quick Install (Debian 12 / Ubuntu)
 
 ```bash
-# 1. Download and extract (or clone from git)
-git clone https://github.com/arti-f/nexOS.git
-
-# 2. Run installer as root
-cd nexOS
-sudo bash scripts/install.sh
+# Download and extract (or clone from git)
+apt install -y git && git clone https://github.com/arti-f/nexOS.git && cd nexOS && sudo bash scripts/install.sh
 
 # Done — open browser:
 #   http://<server-ip>:3000
